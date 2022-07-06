@@ -1,8 +1,8 @@
-version: "3"
+version: "3.7"
 
 services: 
   jupyter_lab:
-    container_name: jupyter_lab
+    container_name: travellist-jupyter
     build: .
     ports: 
       - "8888:8888"
@@ -10,3 +10,21 @@ services:
       - JUPYTER_ENABLE_LAB=yes
     volumes: 
       - ./src:/home/jovyan/work
+    depends_on:
+      - selenium
+    restart: unless-stopped
+    networks:
+      - travellist
+
+  selenium:
+    image: selenium/standalone-firefox
+    container_name: travellist-selenium
+    ports:
+      - 4444:4444
+    restart: unless-stopped
+    networks:
+      - travellist
+
+networks:
+  travellist:
+    driver: bridge
